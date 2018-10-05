@@ -11,7 +11,7 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 #BFSAgent
-#A*_Agent
+#A*_Agent with in_house priority queue
 
 from pacman import Directions
 from game import Agent
