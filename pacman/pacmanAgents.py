@@ -103,7 +103,7 @@ class BFSAgent(Agent):
 
                     if ((child not in frontier) or (child not in explored)):
                         if child.isWin():
-                            return child.getLegalActions()
+                            return child.getLegalPacmanAction()
 
 
                 frontier.append((child, action_that_lead_to_child, cost_from_source, total_cost_child,action_l))
@@ -161,7 +161,7 @@ class DFSAgent(Agent):
 
                     if ((child not in frontier) or (child not in explored)):
                         if child.isWin():
-                            return child.getLegalActions()
+                            return child.getLegalPacmanActions()
 
                 frontier.append((child, action_that_lead_to_child, cost_from_source, total_cost_child, action_l))
 
@@ -191,9 +191,34 @@ class AStarAgent(Agent):
         # TODO: write A* Algorithm instead of returning Directions.STOP
         source=state
         source_total_cost=0 + admissibleHeuristic(source)
+        state_path_cost={}
+        state_path_cost[source]=0
         state_cost_PQ={}
         state_cost_PQ[source]=source_total_cost
         explored=[]
+        while len(state_cost_PQ)>0:
+            node_tup=self.priority_queue_pop(state_cost_PQ)
+            node=node_tup[0]
+            node_cost=node_tup[1]
+            node_path_cost=state_path_cost[node]
+            del state_cost_PQ[node]
+            if(node.isWin()):
+                return node.getLegalActions()
+            explored.append(node)
+            for action in node.getLegalPacmanActions():
+                child=node.generatePacmanSuccessor(action)
+                if (child==None):
+                    node_tup1=self.priority_queue_pop(state_cost_PQ)
+                child_path_cost=state_path_cost[node]+1
+                state_path_cost[child]=child_path_cost
+                child_total_cost=state_path_cost.get(child)+admissibleHeuristic(child)
+                if child not in state_cost_PQ.keys() or child not in explored:
+                    self.priority_queue_insert(state_cost_PQ,child,child_total_cost)
+                elif child in state_cost_PQ.keys() and child_total_cost<state_cost_PQ.get(child):
+                    state_cost_PQ[child]=child_total_cost
+
+
+
 
 
         return Directions.STOP
