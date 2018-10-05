@@ -64,8 +64,7 @@ class BFSAgent(Agent):
     def getAction(self, state):
         # TODO: write BFS Algorithm instead of returning Directions.STOP
         current_node=state
-        if(current_node.isWin()):
-            return current_node.getLegalActions()
+
         frontier = []
         total_cost_source=0+admissibleHeuristic(state)
 
@@ -103,7 +102,7 @@ class BFSAgent(Agent):
 
                     if ((child not in frontier) or (child not in explored)):
                         if child.isWin():
-                            return child.getLegalPacmanAction()
+                            return action_l[1]
 
 
                 frontier.append((child, action_that_lead_to_child, cost_from_source, total_cost_child,action_l))
@@ -123,8 +122,7 @@ class DFSAgent(Agent):
     def getAction(self, state):
         # TODO: write DFS Algorithm instead of returning Directions.STOP
         current_node = state
-        if (current_node.isWin()):
-            return current_node.getLegalActions()
+
         frontier = []
         total_cost_source = 0 + admissibleHeuristic(state)
 
@@ -161,7 +159,7 @@ class DFSAgent(Agent):
 
                     if ((child not in frontier) or (child not in explored)):
                         if child.isWin():
-                            return child.getLegalPacmanActions()
+                            return action_l[1]
 
                 frontier.append((child, action_that_lead_to_child, cost_from_source, total_cost_child, action_l))
 
@@ -182,8 +180,8 @@ class AStarAgent(Agent):
                     min_node = key
                     min_node_cost = value
             return [min_node, min_node_cost]
-    def priority_queue_insert(self,state_cost_dict,key1,value1):
-        state_cost_dict[key1]=value1
+    def priority_queue_insert(self,state_cost_PQ,key1,value1):
+        state_cost_PQ[key1]=value1
 
 
 
@@ -207,15 +205,11 @@ class AStarAgent(Agent):
             explored.append(node)
             for action in node.getLegalPacmanActions():
                 child=node.generatePacmanSuccessor(action)
-                if (child==None):
-                    node_tup1=self.priority_queue_pop(state_cost_PQ)
                 child_path_cost=state_path_cost[node]+1
                 state_path_cost[child]=child_path_cost
-                child_total_cost=state_path_cost.get(child)+admissibleHeuristic(child)
+                child_total_cost=state_path_cost[child]
                 if child not in state_cost_PQ.keys() or child not in explored:
                     self.priority_queue_insert(state_cost_PQ,child,child_total_cost)
-                elif child in state_cost_PQ.keys() and child_total_cost<state_cost_PQ.get(child):
-                    state_cost_PQ[child]=child_total_cost
 
 
 
