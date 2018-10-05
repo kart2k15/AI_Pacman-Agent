@@ -1,4 +1,4 @@
-# AI_Pacman-Agent
 
-Artificial Intelligence, Pacman Game (Fall 2016)
-======================================
+
+Artificial Intelligence, New York University CS-GY 6613 (Fall 2018)
+===================================================================
