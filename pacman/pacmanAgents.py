@@ -10,13 +10,13 @@
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
-
+#BFSAgent
 
 from pacman import Directions
 from game import Agent
 from heuristics import *
 import random
-from collections import deque
+
 import sys
 
 
