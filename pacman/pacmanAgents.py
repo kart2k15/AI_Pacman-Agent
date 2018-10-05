@@ -171,6 +171,28 @@ class AStarAgent(Agent):
         return;
 
     # GetAction Function: Called with every frame
+
+    def priority_queue_pop(self, state_cost_dict):
+        for key, value in sorted(state_cost_dict.iteritems(), key=lambda (k, v): (v, k)):
+            min_node_cost = sys.maxint
+            min_node = ""
+            for key, value in sorted(state_cost_dict.iteritems(), key=lambda (k, v): (v, k)):
+                if (min_node_cost > value):
+                    min_node = key
+                    min_node_cost = value
+            return [min_node, min_node_cost]
+    def priority_queue_insert(self,state_cost_dict,key1,value1):
+        state_cost_dict[key1]=value1
+
+
+
     def getAction(self, state):
         # TODO: write A* Algorithm instead of returning Directions.STOP
+        source=state
+        source_total_cost=0 + admissibleHeuristic(source)
+        state_cost_PQ={}
+        state_cost_PQ[source]=source_total_cost
+        explored=[]
+
+
         return Directions.STOP
