@@ -10,8 +10,9 @@
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
-#BFSAgent with list modified to work as FIFO Queue
-#A*_Agent with in_house priority queue
+#BFSAgent with list modified to work as Queue
+#DFSAgent with list modified to work as Stack
+#AStarAgent(A*)-- used a 2D array & implemented Priority Queue to maintain total minimum cost through list-comprehensions
 
 from pacman import Directions
 from game import Agent
