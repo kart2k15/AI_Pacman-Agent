@@ -225,7 +225,7 @@ class AStarAgent(Agent):
                         state_PQ.append([child,child_path_cost,child_heuristic_cost,child_action_l])
                     elif ([child,child_path_cost,child_heuristic_cost,child_action_l] in state_PQ):
                         for x, node_l in enumerate(state_PQ):
-                            if(node_l[0]==child) and ((node_l[1]+node_l[2])<child_total_cost):
+                            if(node_l[0]==child) and ((node_l[1]+node_l[2])>child_total_cost):
                                 state_PQ[x]=[child,child_path_cost,child_heuristic_cost,child_action_l]
 
 
