@@ -68,7 +68,7 @@ class BFSAgent(Agent):
         frontier = []
         total_cost_source=0+admissibleHeuristic(state)
 
-        frontier.append((current_node, "no-action-root", 0, total_cost_source,[""]))
+        frontier.append([current_node, "no-action-root", 0, total_cost_source,[""]])
 
         explored = []
         z=0
@@ -105,7 +105,7 @@ class BFSAgent(Agent):
                             return action_l[1]
 
 
-                frontier.append((child, action_that_lead_to_child, cost_from_source, total_cost_child,action_l))
+                frontier.append([child, action_that_lead_to_child, cost_from_source, total_cost_child,action_l])
 
 
 
@@ -126,7 +126,7 @@ class DFSAgent(Agent):
         frontier = []
         total_cost_source = 0 + admissibleHeuristic(state)
 
-        frontier.append((current_node, "no-action-root", 0, total_cost_source, [""]))
+        frontier.append([current_node, "no-action-root", 0, total_cost_source, [""]])
 
         explored = []
         z = 0
@@ -161,7 +161,7 @@ class DFSAgent(Agent):
                         if child.isWin():
                             return action_l[1]
 
-                frontier.append((child, action_that_lead_to_child, cost_from_source, total_cost_child, action_l))
+                frontier.append([child, action_that_lead_to_child, cost_from_source, total_cost_child, action_l])
 
 
 class AStarAgent(Agent):
@@ -171,48 +171,62 @@ class AStarAgent(Agent):
 
     # GetAction Function: Called with every frame
 
-    def priority_queue_pop(self, state_cost_dict):
-        for key, value in sorted(state_cost_dict.iteritems(), key=lambda (k, v): (v, k)):
-            min_node_cost = sys.maxint
-            min_node = ""
-            for key, value in sorted(state_cost_dict.iteritems(), key=lambda (k, v): (v, k)):
-                if (min_node_cost > value):
-                    min_node = key
-                    min_node_cost = value
-            return [min_node, min_node_cost]
-    def priority_queue_insert(self,state_cost_PQ,key1,value1):
-        state_cost_PQ[key1]=value1
-
-
-
     def getAction(self, state):
         # TODO: write A* Algorithm instead of returning Directions.STOP
         source=state
-        source_total_cost=0 + admissibleHeuristic(source)
-        state_path_cost={}
-        state_path_cost[source]=0
-        state_cost_PQ={}
-        state_cost_PQ[source]=source_total_cost
+        source_depth_cost=0
+        source_heuristic_cost=admissibleHeuristic(state)
+        action_list=[""]
+        state_PQ=[[source,source_depth_cost,source_heuristic_cost,action_list]]
         explored=[]
-        while len(state_cost_PQ)>0:
-            node_tup=self.priority_queue_pop(state_cost_PQ)
-            node=node_tup[0]
-            node_cost=node_tup[1]
-            node_path_cost=state_path_cost[node]
-            del state_cost_PQ[node]
-            if(node.isWin()):
-                return node.getLegalActions()
-            explored.append(node)
-            for action in node.getLegalPacmanActions():
-                child=node.generatePacmanSuccessor(action)
-                child_path_cost=state_path_cost[node]+1
-                state_path_cost[child]=child_path_cost
-                child_total_cost=state_path_cost[child]
-                if child not in state_cost_PQ.keys() or child not in explored:
-                    self.priority_queue_insert(state_cost_PQ,child,child_total_cost)
+
+        def pq_pop_min_cost():
+            min_node = None
+            min_path_cost = sys.maxint
+            min_heuristic_cost = sys.maxint
+            min_node_index = -1
+            min_total_cost = sys.maxint
+            for x, y in enumerate(state_PQ):
+                sum = y[1] + y[2]
+                if (sum <= min_total_cost):
+                    min_total_cost = sum
+                    min_node = y[0]
+                    min_node_index = x
+                    min_path_cost = y[1]
+                    min_heuristic_cost = y[2]
 
 
 
 
 
-        return Directions.STOP
+            return [state_PQ[min_node_index], min_node_index]
+
+        while len(state_PQ)>0:
+            #the minimum node_list in node_tup
+            node_tup=pq_pop_min_cost()[0]
+            #"actually" deleting that node from the state_PQ (our priority queue)
+            if(len(state_PQ)>0):
+                state_PQ.pop(node_tup[1])
+            if(node_tup[0].isWin()):
+                return node_tup[3][0]
+            explored.append(node_tup[0])
+            for action in node_tup[0].getLegalPacmanActions():
+                child=node_tup[0].generatePacmanSuccessor(action)
+                if(child==None):
+                    min_node_tup=pq_pop_min_cost()[0]
+                    return min_node_tup[3][1]
+                else:
+                    action_child=action
+                    child_action_l=node_tup[3]+[action_child]
+                    child_path_cost=node_tup[1]+1
+                    child_heuristic_cost=admissibleHeuristic(child)
+                    child_total_cost=child_path_cost+child_heuristic_cost
+                    if (child not in explored) or([child,child_path_cost,child_heuristic_cost,child_action_l] in state_PQ):
+                        state_PQ.append([child,child_path_cost,child_heuristic_cost,child_action_l])
+                    elif ([child,child_path_cost,child_heuristic_cost,child_action_l] in state_PQ):
+                        for x, node_l in enumerate(state_PQ):
+                            if(node_l[0]==child) and ((node_l[1]+node_l[2])<child_total_cost):
+                                state_PQ[x]=[child,child_path_cost,child_heuristic_cost,child_action_l]
+
+
+
