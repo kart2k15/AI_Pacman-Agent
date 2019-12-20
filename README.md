@@ -35,7 +35,7 @@ $ python pacman.py -l mediumCorners -p AStarCornersAgent -z 0.5
 $ python pacman.py -l trickySearch -p AStarFoodSearchAgent
 ```
 
-> for more information, check [here](https://github.com/jasonwu0731/NTU-AI-Fall2016/blob/master/Pacman/hw1-search/Project1.html) for details
+
 
 ## HW2 Multi-Agent
 - ReflexAgent: 
@@ -88,5 +88,5 @@ In this project, you will design Pacman agents that use sensors to locate and ea
 $ python busters.py -l smallHunt -p GreedyBustersAgent -n 10 --frameTime=0  
 ```
 ## Credits
-- This is the homework project for the course Artificial Intelligence  (2016 Fall), at National Taiwan University
-- Author: Chien-Sheng Wu
+- This is the homework project for the course Artificial Intelligence (CS-GY 6613, Fall 2018)
+- Author: Kartikeya Shukla
