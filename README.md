@@ -1,4 +1,4 @@
-Artificial Intelligence, Pacman Game (Fall 2016)
+Intelligent Pacman Agents (CS-GY 6613, Fall 2018)
 ======================================
 
 ## Intro
